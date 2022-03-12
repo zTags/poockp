@@ -1,15 +1,18 @@
 use crate::misc::{question, Config};
 
 use std::env::current_dir;
-use std::fs::{File, create_dir_all};
-use std::path::PathBuf;
+use std::fs::{create_dir, create_dir_all, File};
 use std::io::{Result as Res, Write};
+use std::path::PathBuf;
 use std::process::exit;
 
 use serde_yaml::to_string;
 
-pub fn init() -> Res<()> {
+pub fn new(name: &str) -> Res<()> {
     let mut path = current_dir()?;
+    path.push(name);
+
+    // ask user questions
     let name = question(
         "What do you want to call this project",
         path.file_name().unwrap().to_str().unwrap(),
@@ -22,6 +25,8 @@ pub fn init() -> Res<()> {
         "src/main.spwn",
         "src/main.spwn",
     );
+
+    // generate config
     let cfg = Config {
         name,
         version,
@@ -34,13 +39,13 @@ pub fn init() -> Res<()> {
     if &ans[..1] == "n" {
         exit(0);
     }
-
     // create files
+    create_dir(&path)?;
     path.push("poockp.yml");
     let mut cfg_file = File::create(&path).expect("PooCKP project already exists");
     cfg_file.write_all(to_string(&cfg).unwrap().as_bytes())?;
 
-    // TODO: holy shit this sucks too
+    // TODO: holy shit this sucks
     path.pop();
     let mut p = path.clone().to_str().unwrap().to_string();
     p.push_str("/");

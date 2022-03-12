@@ -14,26 +14,22 @@ macro_rules! reachable {
 #[derive(Parser, Debug)]
 struct Poockp {
     #[clap(subcommand)]
-    subcommands: Subcommands
+    subcommands: Subcommands,
 }
 
 #[derive(Subcommand, Debug)]
 enum Subcommands {
-    #[clap(about = "Installs a PCKP package")]
-    Install {
-        name: String
-    },
+    #[clap(about = "Installs a PCKP/PooCKP package")]
+    Install { name: String },
 
-    #[clap(about = "Removes a PCKP package")]
-    Remove {
-        name: String
-    },
+    #[clap(about = "Removes a PCKP/PooCKP package")]
+    Remove { name: String },
 
-    #[clap(about = "Initializes a new Poockp project")]
-    Init { },
+    #[clap(about = "Initializes a new PooCKP project")]
+    Init {},
 
-    #[clap(about = "Creates a new Poockp project")]
-    New { name: String }
+    #[clap(about = "Creates a new PooCKP project")]
+    New { name: String },
 }
 
 fn main() {
@@ -42,7 +38,7 @@ fn main() {
     match &args.subcommands {
         Subcommands::Install { name } => println!("installing {name}"),
         Subcommands::Remove { name } => println!("removing {name}"),
-        Subcommands::New { name } => println!("creating new PooCKP project {name}..."),
-        Subcommands::Init { } => subcommands::init().unwrap()
+        Subcommands::New { name } => subcommands::new(name.as_str()).unwrap(),
+        Subcommands::Init {} => subcommands::init().unwrap(),
     }
 }

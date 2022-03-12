@@ -1,5 +1,5 @@
-mod question;
 mod config;
+mod question;
 
-pub use question::question;
 pub use config::Config;
+pub use question::question;
