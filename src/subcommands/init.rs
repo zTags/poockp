@@ -1,8 +1,9 @@
 use crate::misc::{question, Config};
 
-use std::io::Result as Res;
+use std::io::{Result as Res, Write};
 use std::env::current_dir;
 use std::process::exit;
+use std::fs::File;
 
 use serde_yaml::to_string;
 
@@ -20,5 +21,10 @@ pub fn init() -> Res<()> {
     println!("{}", to_string(&cfg).unwrap());
     let ans = question("Is this correct?", "Y/n", "y").to_ascii_lowercase();
     if &ans[..1] == "n" { exit(0); }
+    let mut cfg_path = cwd.clone();
+    cfg_path.push("poockp.yml");
+    let mut cfg_file = File::create(cfg_path).expect("PooCKP project already exists");
+    cfg_file.write_all(to_string(&cfg).unwrap().as_bytes())?;
+
     Ok(())
 }
