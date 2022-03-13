@@ -32,6 +32,7 @@ pub fn new(name: &str) -> Res<()> {
         version,
         is_executable: &is_executable[..1] != "l",
         entry: entry.clone(),
+        dependencies: Vec::default(),
     };
 
     println!("{}", to_string(&cfg).unwrap());
@@ -48,10 +49,10 @@ pub fn new(name: &str) -> Res<()> {
     // TODO: holy shit this sucks
     path.pop();
     let mut p = path.clone().to_str().unwrap().to_string();
-    p.push_str("/");
+    p.push('/');
     p.push_str(entry.as_str());
     #[cfg(target_os = "windows")]
-    let p_ = p.replacen("/", "\\", usize::MAX);
+    let p_ = p.replacen('/', "\\", usize::MAX);
     let pa = PathBuf::from(p_);
     let mut pat = pa.clone();
     pat.pop();

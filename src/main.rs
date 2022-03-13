@@ -20,10 +20,10 @@ struct Poockp {
 #[derive(Subcommand, Debug)]
 enum Subcommands {
     #[clap(about = "Installs a PCKP/PooCKP package")]
-    Install { name: String },
+    Add { names: Vec<String> },
 
     #[clap(about = "Removes a PCKP/PooCKP package")]
-    Remove { name: String },
+    Remove { names: Vec<String> },
 
     #[clap(about = "Initializes a new PooCKP project")]
     Init {},
@@ -36,8 +36,8 @@ fn main() {
     let args = Poockp::parse();
 
     match &args.subcommands {
-        Subcommands::Install { name } => println!("installing {name}"),
-        Subcommands::Remove { name } => println!("removing {name}"),
+        Subcommands::Add { names } => subcommands::add(names.to_vec()), // TODO: why is this like this lmao
+        Subcommands::Remove { names } => subcommands::remove(names.to_vec()),
         Subcommands::New { name } => subcommands::new(name.as_str()).unwrap(),
         Subcommands::Init {} => subcommands::init().unwrap(),
     }
